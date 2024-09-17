@@ -248,11 +248,19 @@ $n$ independently and identically distributed data points $\{x_i\}_{i=1}^n$, whe
 \end{align}
 \begin{answertext}{9cm}{}
 
-$\mathcal{L}(\theta) = \prod_{i=1}^{n}p(x_i | \theta)$\\
-$p(x_i | \theta) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$\\
-$\mathcal{L}(\theta) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$\\
-$\log{\mathcal{L}(\theta)} = \ell(\theta) = \sum_{i=1}^{n}\log(\frac{1}{\sqrt{2\pi\sigma^2}})+\log(e^\frac{(x-\mu)^2}{2\sigma^2})$\\
-$\ell(\theta) = \sum_{i=1}^{n}\log(\frac{1}{\sqrt{2\pi\sigma^2}}) + \frac{(x-\mu)^2}{2\sigma^2}$
+Likelihood\\
+$\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \prod_{i=1}^{n} p(x_i | \mu, \sigma^2)$\\
+$p(x_i | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp({-\frac{(x_i-\mu)^2}{2\sigma^2}})$\\
+$\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} \exp({-\frac{(x_i-\mu)^2}{2\sigma^2}}) = (\frac{1}{\sqrt{2\pi\sigma^2}})^n \exp(-\Sigma_{i=1}^{n}\frac{(x_i-\mu)^2}{2\sigma^2})$\\
+
+Log likelihood\\
+$\log{\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n})} = \ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \log((\frac{1}{\sqrt{(2\pi\sigma^2)}})^n \exp(-\Sigma_{i=1}^{n}\frac{(x_i-\mu)^2}{2\sigma^2}))$\\
+$\ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = n\log(\frac{1}{\sqrt{2\pi\sigma^2}}) - \frac{1}{2\sigma^2} \Sigma_{i=1}^{n}(x_i-\mu)^2 = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\Sigma_{i=1}^{n}(x_i-\mu)^2$\\
+
+Maximize log likelihood\\
+$\frac{d}{d\mu} \ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \frac{1}{\sigma^2}\Sigma_{i=1}^{n}(x_i-\mu) = 0$\\
+$0 = \frac{1}{\sigma^2}\Sigma_{i=1}^{n}(x_i-\mu) = \Sigma_{i=1}^{n}(x_i-\mu) = -n\mu + \Sigma_{i=1}^{n}(x_i)$\\
+$\mu = \frac{1}{n}\Sigma_{i=1}^{n}x_i$
 
 \end{answertext} 
 \newpage
