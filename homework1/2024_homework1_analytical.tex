@@ -65,7 +65,7 @@
 
 
 
-\bgroup
+% \bgroup
 \def\arraystretch{1.5}
 \newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
 \newcolumntype{z}[1]{>{\centering\arraybackslash}m{#1}}
@@ -182,7 +182,7 @@
 (50 points)\\
 \Large{Assigned: Friday, September 6, 2024} \\
 \Large{Due: Friday, September 20, 2024, 11:59 pm US/Eastern}}
-\author{NAME (JHED)}
+\author{Trevor Black (tblack20)}
 \date{}
 
 \begin{document}
@@ -248,6 +248,12 @@ $n$ independently and identically distributed data points $\{x_i\}_{i=1}^n$, whe
 \end{align}
 \begin{answertext}{9cm}{}
 
+$\mathcal{L}(\theta) = \prod_{i=1}^{n}p(x_i | \theta)$\\
+$p(x_i | \theta) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$\\
+$\mathcal{L}(\theta) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$\\
+$\log{\mathcal{L}(\theta)} = \ell(\theta) = \sum_{i=1}^{n}\log(\frac{1}{\sqrt{2\pi\sigma^2}})+\log(e^\frac{(x-\mu)^2}{2\sigma^2})$\\
+$\ell(\theta) = \sum_{i=1}^{n}\log(\frac{1}{\sqrt{2\pi\sigma^2}}) + \frac{(x-\mu)^2}{2\sigma^2}$
+
 \end{answertext} 
 \newpage
 \item (5 pts) Show that the MLE estimator of the variance is: 
@@ -256,8 +262,8 @@ $n$ independently and identically distributed data points $\{x_i\}_{i=1}^n$, whe
 \end{align}
 \begin{answertext}{9cm}{}
 
+TODO
 
-  
 \end{answertext}
 
 \end{enumerate}
@@ -265,7 +271,7 @@ $n$ independently and identically distributed data points $\{x_i\}_{i=1}^n$, whe
 % -----------------------------------------------------------
 \pagebreak
 \section{Conditional Independence [20 pts]}
-A large group of people were surveyed on their recent health. Of these, 0.20 had a fever and 0.05 had pneumonia. Among the people who had pneumonia, 0.70 had cough as a symptom and 0.50 had fever as a symptom. Among the people who had a fever, 0.40 had cough as a symptom.
+% A large group of people were surveyed on their recent health. Of these, 0.20 had a fever and 0.05 had pneumonia. Among the people who had pneumonia, 0.70 had cough as a symptom and 0.50 had fever as a symptom. Among the people who had a fever, 0.40 had cough as a symptom.
 
 Let us create a probabilistic model where the presence/absence of each of these two symptoms, cough and fever, are conditionally independent given the presence/absence of pneumonia. Using this data for the empirical probabilities of our model, answer the following questions.
 \begin{enumerate}
