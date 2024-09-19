@@ -386,7 +386,14 @@ $p(\lambda \mid x) ~ Gamma(\alpha + 1, \beta + x)$
     \item (5 pts) Derive the maximum a posteriori (MAP) of \(\lambda\) under the \(Gamma\left(\alpha, \beta\right)\) prior. \\
 \begin{answertext}{6cm}{}
 
-todo
+Maximum likelihood estimate of $\hat{\lambda}$\\
+$\hat{\lambda}_{MAP}(x) = \argmax_{\lambda} f(\lambda \mid x)$\\
+From last question, we see $f(\lambda \mid x) \propto \frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^\alpha e^{-\lambda(x+\beta)}$\\
+$\log p(\lambda \mid x) = \alpha \log(\lambda) - \lambda(x + \beta) + C$ where $C$ is the constant term.\\
+$\frac{d}{d\lambda}\log p(\lambda \mid x) = \frac{\alpha}{\lambda}-(x+\beta)$
+$0 = \frac{\alpha}{\lambda}-(x+\beta) \Longrightarrow \lambda = \frac{\alpha}{x + \beta}$\\
+
+$\hat{\lambda}_{MAP} = \frac{\alpha}{x+\beta}$
 
 \end{answertext} 
 
