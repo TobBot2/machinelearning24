@@ -251,16 +251,19 @@ $n$ independently and identically distributed data points $\{x_i\}_{i=1}^n$, whe
 Likelihood\\
 $\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \prod_{i=1}^{n} p(x_i | \mu, \sigma^2)$\\
 $p(x_i | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp({-\frac{(x_i-\mu)^2}{2\sigma^2}})$\\
-$\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} \exp({-\frac{(x_i-\mu)^2}{2\sigma^2}}) = (\frac{1}{\sqrt{2\pi\sigma^2}})^n \exp(-\Sigma_{i=1}^{n}\frac{(x_i-\mu)^2}{2\sigma^2})$\\
+$\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} \exp({-\frac{(x_i-\mu)^2}{2\sigma^2}}) = (\frac{1}{\sqrt{2\pi\sigma^2}})^n \exp(-\sum_{i=1}^{n}\frac{(x_i-\mu)^2}{2\sigma^2})$\\
 
 Log likelihood\\
-$\log{\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n})} = \ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \log((\frac{1}{\sqrt{(2\pi\sigma^2)}})^n \exp(-\Sigma_{i=1}^{n}\frac{(x_i-\mu)^2}{2\sigma^2}))$\\
-$\ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = n\log(\frac{1}{\sqrt{2\pi\sigma^2}}) - \frac{1}{2\sigma^2} \Sigma_{i=1}^{n}(x_i-\mu)^2 = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\Sigma_{i=1}^{n}(x_i-\mu)^2$\\
+$\log{\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n})} = \ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \log((\frac{1}{\sqrt{(2\pi\sigma^2)}})^n \exp(-\sum_{i=1}^{n}\frac{(x_i-\mu)^2}{2\sigma^2}))$\\
+$\ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = n\log(\frac{1}{\sqrt{2\pi\sigma^2}}) - \frac{1}{2\sigma^2} \sum_{i=1}^{n}(x_i-\mu)^2 = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i-\mu)^2$\\
 
-Maximize log likelihood\\
-$\frac{d}{d\mu} \ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \frac{1}{\sigma^2}\Sigma_{i=1}^{n}(x_i-\mu) = 0$\\
-$0 = \frac{1}{\sigma^2}\Sigma_{i=1}^{n}(x_i-\mu) = \Sigma_{i=1}^{n}(x_i-\mu) = -n\mu + \Sigma_{i=1}^{n}(x_i)$\\
-$\mu = \frac{1}{n}\Sigma_{i=1}^{n}x_i$
+Maximize log likelihood for $\mu$\\
+$\frac{d}{d\mu} \ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = \frac{1}{\sigma^2}\sum_{i=1}^{n}(x_i-\mu) = 0$\\
+$0 = \frac{1}{\sigma^2}\sum_{i=1}^{n}(x_i-\mu) = \sum_{i=1}^{n}(x_i-\mu) = -n\mu + \sum_{i=1}^{n}(x_i)$\\
+$\mu = \frac{1}{n}\sum_{i=1}^{n}x_i$\\
+
+So...
+$\hat{\mu} = \frac{1}{n}\sum_{i=1}^{n}x_i$
 
 \end{answertext} 
 \newpage
@@ -270,7 +273,19 @@ $\mu = \frac{1}{n}\Sigma_{i=1}^{n}x_i$
 \end{align}
 \begin{answertext}{9cm}{}
 
-TODO
+Likelihood (see previous question for details)\\
+$\mathcal{L}(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = (\frac{1}{\sqrt{2\pi\sigma^2}})^n \exp(-\sum_{i=1}^{n}\frac{(x_i-\mu)^2}{2\sigma^2})$\\
+
+Log likelihood (see previous question for details)\\
+$\ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i-\mu)^2$\\
+
+Maximize log likelihood for $\sigma^2$\\
+$\frac{d}{d\sigma^2}\ell(\mu, \sigma^2 | \{x_i\}_{i=1}^{n}) = -\frac{n}{2\sigma^2}+\frac{1}{2\sigma^4}\sum_{i=1}^{n}(x_i-\mu)^2 = 0$\\
+$0 = -n\sigma^2+\sum_{i=1}^{n}(x_i-\mu)^2$\\
+$\sigma^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i-\mu)^2$\\
+
+So...\\
+$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i-\hat{\mu})^2$
 
 \end{answertext}
 
@@ -279,24 +294,53 @@ TODO
 % -----------------------------------------------------------
 \pagebreak
 \section{Conditional Independence [20 pts]}
-% A large group of people were surveyed on their recent health. Of these, 0.20 had a fever and 0.05 had pneumonia. Among the people who had pneumonia, 0.70 had cough as a symptom and 0.50 had fever as a symptom. Among the people who had a fever, 0.40 had cough as a symptom.
+A large group of people were surveyed on their recent health. Of these, 0.20 had a fever and 0.05 had pneumonia. Among the people who had pneumonia, 0.70 had cough as a symptom and 0.50 had fever as a symptom. Among the people who had a fever, 0.40 had cough as a symptom.
 
 Let us create a probabilistic model where the presence/absence of each of these two symptoms, cough and fever, are conditionally independent given the presence/absence of pneumonia. Using this data for the empirical probabilities of our model, answer the following questions.
 \begin{enumerate}
 \item (5 pts) Find the probability that someone has both a cough and a fever.  \\
-\begin{answertext}{6cm}{}
+\begin{answertext}{6.5cm}{}
 
-
+Let $C = cough, F = fever,$ and $P = pneumonia$\\
+$p(C \cap F) = p(C \cap F \mid P)p(P) + p(C \cap F \mid \lnot P)p(\lnot P)$\\
+$p(C \cap F \mid P) = p(C \mid P)p(F \mid P) = 0.7 \cdot 0.5 = 0.35$\\
+$p(C \cap F \mid \lnot P) = p(C \mid \lnot P)p(F \mid \lnot P) = p(C \mid F) \cdot p(F \mid \lnot P)$\\
+Find $p(F \mid \lnot P)$...\\
+$p(F) = p(F \mid P) \cdot p(P) + p(F \mid \lnot P)\cdot p(\lnot P)$\\
+$0.2 = 0.5 \cdot 0.05 + p(F \mid \lnot P) \cdot 0.95 \Longrightarrow p(F \mid \lnot P) \approx 0.1842$\\
+$p(C \cap F \mid \lnot P) = .4 \cdot 0.1842 \approx 0.7368$\\
+$p(C \cap F) = 0.35 \cdot 0.05 + 0.7368 \cdot 0.95 \approx 0.0875 = 8.75\%$
   
 \end{answertext} 
 \item (5 pts) Find the probability that someone has pneumonia given that they have a fever but no cough.  \\
 \begin{answertext}{6cm}{}
+
+Let $C = cough, F = fever,$ and $P = pneumonia$\\
+$p(P \mid F, \lnot C) = \frac{p(F \cap \lnot C \mid P)p(P)}{p(F \cap \lnot C)}$\\
+$p(F \cap \lnot C \mid P) = p(F \mid P)p(\lnot C \mid P) = 0.5 \cdot (1 - 0.7) = .15$\\
+$p(F \cap \lnot C) = p(F \cap \lnot C \mid P)p(P) + p(F \cap \lnot C \mid \lnot P)$\\
+$p(F \cap \lnot C \mid \lnot P) =  p(F \mid \lnot P)p(\lnot C \mid F) \approx 0.1842 \cdot (1 - 0.4) = 0.1105$\\
+Note that $p(F \mid \lnot P)$ was found in the previous question.\\
+$p(F \cap \lnot C) = 0.15(0.05) + 0.11052(0.95) \approx 0.1135$\\
+$p(P \mid F \cap \lnot C) = \frac{p(F \cap \lnot C \mid P)p(P)}{p(F \cap \lnot C)} = \frac{0.15 \cdot 0.05}{0.1135} \approx 0.0661 = 6.61\%$
+
 \end{answertext} 
 
 \newpage
 
 \item (10 pts) Given assumptions described above, how many parameters do we need to specify the joint distribution $p(fever, cough, pneumonia)$?  \\
 \begin{answertext}{6cm}{}
+
+Let $C = cough, F = fever,$ and $P = pneumonia$\\
+The total number of combinations of these variables i $2^3 = 8$.\\
+$p(F, C, P) = p(P)p(F \mid P)p(C \mid F, P)$\\
+$p(C \mid F, P) = p(C \mid P)$ Due to conditional independence.\\
+Counting the parameters...\\
+$p(P) \rightarrow $ 1 parameter (it is a binary variable)\\
+$p(F \mid P) \rightarrow $ 2 parameters ($P$ may be $\lnot P$ as well, giving two binary variables)\\
+$p(C \mid P) \rightarrow $ 2 parameters for identical reason as above.\\
+The sum of these results in $5$ total parameters.
+        
 \end{answertext} 
 \end{enumerate}
 
@@ -307,11 +351,28 @@ Let us create a probabilistic model where the presence/absence of each of these 
 \begin{enumerate}
 
 \item (5 pts) Define what conjugate priors are, and explain why they are useful. \\
-\begin{answertext}{3cm}{}  
+\begin{answertext}{3.5cm}{}  
+
+A conjugate prior is a prior distribution that belongs to the same probability distribution of a posterior distribution for a likelihood function. $p(\theta \mid x) \propto p(x \mid \theta)p(\theta)$\\
+
+Using a conjugate prior is useful as the posterior distribution is more closely related to the prior distribution. This makes it easier for calculations, updating the posterior by adjusting the prior, and providing an easier interpretation for data.\\
+
 \end{answertext} 
 
 \item (10 pts) Show that the Gamma distribution is a conjugate prior of the exponential distribution. That is, show that if $x \sim \text{Exp}(\lambda)$ and $\lambda \sim \text{Gamma}(\alpha, \beta)$, then $p(\lambda | x) \sim \text{Gamma}(\alpha^*, \beta^*)$ for some $\alpha^*$, $\beta^*$. \\
 \begin{answertext}{6cm}{}
+
+Likelihood of $x$:\\
+$p(x \mid \lambda) = \lambda e^{-\lambda x}$ for $x \geq 0$\\
+Gamma prior:\\
+$p(\lambda) = \frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^{\alpha-1}e^{-\beta\lambda}$ for $\lambda > 0$\\
+Bayes' theorem:\\
+$p(\lambda \mid x) \propto p(x \mid \lambda)p(\lambda) = (\lambda e^{-\lambda x}) \cdot (\frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^{\alpha-1}e^{-\beta\lambda})$\\
+$ = \frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^\alpha e^{-\lambda(x+\beta)}$\\
+
+We can see that $\alpha^* = \alpha + 1$ and $\beta^* = \beta + x$. So...\\
+$p(\lambda \mid x) ~ Gamma(\alpha + 1, \beta + x)$
+
 \end{answertext} 
 
 %    \item Let us assume that \(\lambda\) follows a Gamma distribution with parameters \(\alpha, \beta\) (this is the prior distribution):
@@ -324,6 +385,9 @@ Let us create a probabilistic model where the presence/absence of each of these 
 
     \item (5 pts) Derive the maximum a posteriori (MAP) of \(\lambda\) under the \(Gamma\left(\alpha, \beta\right)\) prior. \\
 \begin{answertext}{6cm}{}
+
+todo
+
 \end{answertext} 
 
 \end{enumerate}
