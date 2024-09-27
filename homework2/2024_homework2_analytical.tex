@@ -1,0 +1,349 @@
+\documentclass[11pt]{article}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{url}
+\usepackage{wrapfig}
+\usepackage{color}
+\usepackage{marvosym}
+\usepackage{enumerate}
+\usepackage{subfigure}
+\usepackage{tikz}
+\usepackage[fleqn]{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[many]{tcolorbox}
+\usepackage{lipsum}
+\usepackage{float}
+\usepackage{trimclip}
+\usepackage{listings}
+\usepackage{environ}% http://ctan.org/pkg/environ
+\usepackage{wasysym}
+\usepackage{array}
+
+
+\oddsidemargin 0mm
+\evensidemargin 5mm
+\topmargin -20mm
+\textheight 240mm
+\textwidth 160mm
+
+\newcommand{\vwi}{{\bf w}_i}
+\newcommand{\vw}{{\bf w}}
+\newcommand{\vx}{{\bf x}}
+\newcommand{\vy}{{\bf y}}
+\newcommand{\vxi}{{\bf x}_i}
+\newcommand{\yi}{y_i}
+\newcommand{\vxj}{{\bf x}_j}
+\newcommand{\vxn}{{\bf x}_n}
+\newcommand{\yj}{y_j}
+\newcommand{\ai}{\alpha_i}
+\newcommand{\aj}{\alpha_j}
+\newcommand{\X}{{\bf X}}
+\newcommand{\Y}{{\bf Y}}
+\newcommand{\vz}{{\bf z}}
+\newcommand{\msigma}{{\bf \Sigma}}
+\newcommand{\vmu}{{\bf \mu}}
+\newcommand{\vmuk}{{\bf \mu}_k}
+\newcommand{\msigmak}{{\bf \Sigma}_k}
+\newcommand{\vmuj}{{\bf \mu}_j}
+\newcommand{\msigmaj}{{\bf \Sigma}_j}
+\newcommand{\pij}{\pi_j}
+\newcommand{\pik}{\pi_k}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\el}{\mathcal{L}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\vxij}{{\bf x}_{ij}}
+\newcommand{\vt}{{\bf t}}
+\newcommand{\yh}{\hat{y}}
+\newcommand{\code}[1]{{\footnotesize \tt #1}}
+\newcommand{\alphai}{\alpha_i}
+\newcommand{\defeq}{\overset{\text{def}}{=}}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+
+
+
+\bgroup
+\def\arraystretch{1.5}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{z}[1]{>{\centering\arraybackslash}m{#1}}
+
+%Arguments are 1 - height, 2 - box title
+\newtcolorbox{textanswerbox}[2]{%
+ width=\textwidth,colback=white,colframe=blue!30!black,floatplacement=H,height=#1,title=#2,clip lower=true,before upper={\parindent0em}}
+
+ \newtcolorbox{eqanswerbox}[1]{%
+ width=#1,colback=white,colframe=black,floatplacement=H,height=3em,sharp corners=all,clip lower=true,before upper={\parindent0em}}
+
+ %Arguments are 1 - height, 2 - box title
+ \NewEnviron{answertext}[2]{
+        \noindent
+        \marginbox*{0pt 10pt}{
+        \clipbox{0pt 0pt 0pt 0pt}{
+        \begin{textanswerbox}{#1}{#2}
+        \BODY
+        \end{textanswerbox}
+        }
+        }
+}
+
+%Arguments are 1 - height, 2 - box title, 3 - column definition
+ \NewEnviron{answertable}[3]{
+        \noindent
+        \marginbox*{0pt 10pt}{
+        \clipbox{0pt 0pt 0pt 0pt}{
+        \begin{textanswerbox}{#1}{#2}
+                \vspace{-0.5cm}
+                        \begin{table}[H]
+                        \centering
+                        \begin{tabular}{#3}
+                                \BODY
+                        \end{tabular}
+                        \end{table}
+        \end{textanswerbox}
+        }
+        }
+}
+
+ %Arguments are 1 - height, 2 - box title, 3 - title, 4- equation label, 5 - equation box width
+ \NewEnviron{answerequation}[5]{
+        \noindent
+        \marginbox*{0pt 10pt}{
+        \clipbox{0pt 0pt 0pt 0pt}{
+        \begin{textanswerbox}{#1}{#2}
+                \vspace{-0.5cm}
+                        \begin{table}[H]
+                        \centering
+                \renewcommand{\arraystretch}{0.5}% Tighter
+
+                        \begin{tabular}{#3}
+                                #4 =	&
+                        \clipbox{0pt 0pt 0pt 0pt}{
+
+                        \begin{eqanswerbox}{#5}
+                                $\BODY$
+                        \end{eqanswerbox}
+                        } \\
+                        \end{tabular}
+                        \end{table}
+
+        \end{textanswerbox}
+        }
+        }
+}
+
+ %Arguments are 1 - height, 2 - box title
+ \NewEnviron{answerderivation}[2]{
+        \noindent
+        \marginbox*{0pt 10pt}{
+        \clipbox{0pt 0pt 0pt 0pt}{
+        \begin{textanswerbox}{#1}{#2}
+        \BODY
+        \end{textanswerbox}
+        }
+        }
+}
+
+\newcommand{\Checked}{{\LARGE \XBox}}%
+\newcommand{\Unchecked}{{\LARGE \Square}}%
+\newcommand{\TextRequired}{{\textbf{Place Answer Here}}}%
+\newcommand{\EquationRequired}{\textbf{Type Equation Here}}%
+
+
+\newcommand{\answertextheight}{5cm}
+\newcommand{\answertableheight}{4cm}
+\newcommand{\answerequationheight}{2.5cm}
+\newcommand{\answerderivationheight}{14cm}
+
+\newcounter{QuestionCounter}
+\newcounter{SubQuestionCounter}[QuestionCounter]
+\setcounter{SubQuestionCounter}{1}
+
+\newcommand{\subquestiontitle}{Question \theQuestionCounter.\theSubQuestionCounter~}
+\newcommand{\newquestion}{\stepcounter{QuestionCounter}\setcounter{SubQuestionCounter}{1}\newpage}
+\newcommand{\newsubquestion}{\stepcounter{SubQuestionCounter}}
+
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\indices}{indices}
+\DeclareMathOperator{\Bernoulli}{Bernoulli}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+
+\lstset{language=[LaTeX]TeX,basicstyle=\ttfamily\bf}
+
+\pagestyle{myheadings}
+\markboth{Homework 2}{Fall 2024 CS 475/675 Machine Learning: Homework 2}
+
+\title{CS 475 Machine Learning: Homework 2 Analytical \\
+(50 points)\\
+\Large{Assigned: Friday, September 20, 2024} \\
+\Large{Due: Friday, October 4, 2024, 11:59 pm US/Eastern}}
+\author{NAME (JHED)}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{headings}
+
+\section*{Instructions }
+We have provided this \LaTeX{} document for turning in this homework. We give you one or more boxes to answer each question.  The question to answer for each box will be noted in the title of the box.  You can change the size of the box if you need more space.\\
+
+{\bf Other than your name, do not type anything outside the boxes. Leave the rest of the document unchanged.}\\
+
+
+\textbf{Do not change any formatting in this document, or we may be unable to
+  grade your work. This includes, but is not limited to, the font sizes, and the spacing of text and tables.  Additionally, do
+  not add text outside of the answer boxes. Entering your answers are the only
+  changes allowed.}\\
+
+
+\textbf{We strongly recommend you review your answers in the generated PDF to
+  ensure they appear correct. We will grade what appears in the answer boxes in
+  the submitted PDF, NOT the original latex file.}
+
+% \section*{ Notation}
+% {
+% \centering
+% \smallskip\begin{tabular}{r l}
+% \(\vec{x_i}\) & One input data vector. \(\vec{x_i}\) is \(M\) dimensional.
+% \(\vec{x_i} \in \mathbb{R}^{1 \times M}\).  \\ &
+% We assume $\vec{x_i}$ is augmented with a  $1$ to include a bias term. \\ \\
+% \(\vec{X}\) & 	A matrix of concatenated \(\vec{x_i}\)'s. There are \(N\) input vectors, so \(\vec{X} \in \mathbb{R}^{N \times M}\) \\ \\
+% \(y_i\) & The true label for input vector \(\vec{x_i}\). In regression problems, \(y_i\) is continuous. \\ & In general ,\(y_i\) can be a vector, but for now we assume it's a scalar: \(y_i \in \mathbb{R}^1\). \\ \\
+
+% \(\vec{y}\) & 	A vector of concatenated \(y_i\)'s. There are \(N\) input vectors, so \(\vec{y} \in \mathbb{R}^{N \times 1}\) \\ \\
+
+% \(\vec{w}\) & A weight vector. We are trying to learn the elements of \(\vec{w}\). \\
+% & \(\vec{w}\) is the same number of elements as \(\vec{x_i}\) because we will end up computing \\
+% & the dot product \(\vec{x_i} \cdot \vec{w}\). \\
+% & \(\vec{w} \in \mathbb{R}^{M \times 1}\). We assume the bias term is included in \(\vec{w}\). \\ \\
+
+% \(h(\vec(x))\) & The true regression function that describes the data. \\ \\
+ 
+% i.i.d. & Independently and identically distributed. \\ \\
+
+% Bias-variance  & We can write \(E_D[(f(x, D) - h(x))^2]\) = \\
+% decomposition  & \((E_D[f(x, D) - h(x))^2 + E_D[(f(x, D) - E_D[f(x, D)])^2]\) \\
+%                             & where the first term is the bias squared, and the second term is the variance.\\ \\
+
+%  Notes: & In general, a lowercase letter (not boldface), $a$, indicates a scalar. \\
+%   & A boldface lowercase letter, $\vec{a}$, indicates a vector. \\  &  A boldface uppercase letter, $\vec{A}$, indicates a matrix. \\
+% \end{tabular}
+% }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+\section{Linear Regression [25 pts]}
+Suppose that we have a dataset of $n$ samples $\mathcal{D}=\{(\mathbf{x}_1, y_1), \cdots (\mathbf{x}_n, y_n)\}$, where $\mathbf{x}_i\in \mathbb{R}^k$ is a feature vector, and $y_i\in \mathbb{R}$ is the corresponding target value. Each sample follows a linear model:
+\[y_i=g(\mathbf{x}_i ; \vec{\beta})+\epsilon_i\]
+where the linear function $g(\mathbf{x}_i ; \vec{\beta})$ is defined as:
+\(g(\mathbf{x}_i ; \vec{\beta}) \equiv \beta_{\text {int }}+\sum_{j=1}^k \mathbf{x}_{ij} \cdot \beta_j
+\)\\
+Here:
+\begin{itemize}
+    \item $\beta_{\text {int }}$ is the intercept term.
+\item ${\beta}=[\beta_{\mathrm{int}}, \beta_1, \ldots, \beta_k]$ represents the linear model parameters.
+\item The noise  $\epsilon_i$ is independently and identically distributed as $\epsilon_i \stackrel{\text { i.i.d. }}{\sim} \mathcal{N}\left(0, \sigma^2\right)$, where $\mathcal{N}\left(0, \sigma^2\right)$ denotes a normal distribution with mean 0 and variance $\sigma^2$.
+\end{itemize}
+
+As we've seen in the lecture, this model can be viewed as:
+
+\begin{align}
+& \left(\begin{array}{c}
+y_1 \\
+\ldots \\
+y_n
+\end{array}\right)=\left(\begin{array}{cccc}
+1 & \mathbf{x}_{11} & \ldots & \mathbf{x}_{1 k} \\
+\ldots & \ldots & \ldots & \ldots \\
+1 & \mathbf{x}_{n 1} & \ldots & \mathbf{x}_{n k}
+\end{array}\right) \times\left(\begin{array}{c}
+\beta_{\text {int }} \\
+\beta_1 \\
+\ldots \\
+\beta_k
+\end{array}\right)+\left(\begin{array}{c}
+\epsilon_1 \\
+\ldots \\
+\epsilon_n
+\end{array}\right), \\
+& Y=X \cdot \beta +\boldsymbol{\epsilon},
+\end{align}
+where $\boldsymbol{\epsilon}=[\epsilon_1,\epsilon_2,\cdots, \epsilon_n]$ is the noise vector.
+
+Let $\hat{\beta}=[X^\top X]^{-1}X^\top Y$ be the least squares estimator of $\beta$ on the dataset $\mathcal{D}$. Note that $\hat{\vec{\beta}}$ is a \textbf{random vector} due to the randomness introduced by the noise $\boldsymbol{\epsilon}$.
+\begin{enumerate}
+\item (5 pts) Show that the sum of the residuals is zero:
+\[\sum_{i=1}^n(g(\mathbf{x}_i, \hat{\beta}) -y_i)=0\]
+
+\begin{answertext}{6cm}{}
+
+\end{answertext} 
+\pagebreak
+\item (10 pts)  Assume  $\mathbb{E}[\boldsymbol{\epsilon}|X]=0$ w.r.t the conditional distribution $P(\boldsymbol{\epsilon}|X)$, show that the least square estimator is an unbiased estimator, i.e., $\mathbb{E}_{\mathcal{D}}[\hat{\beta}]=\beta$.
+
+\begin{answertext}{9cm}{}
+
+\end{answertext} 
+\item (10 pts) Assume that the covariance matrix of $\boldsymbol{\epsilon}$ is $\mathbb{E}\left[\boldsymbol{\epsilon} \boldsymbol{\epsilon}^T\right]=\sigma^2 I$.\\ Show that $\textrm{Var}(\hat{\beta})=\sigma^2\left(X^\top X\right)^{-1}$.
+
+\begin{answertext}{9cm}{}
+
+\end{answertext} 
+
+
+
+
+\end{enumerate}
+
+% -----------------------------------------------------------
+\pagebreak
+\section{Logistic Regression [25 pts]}
+In binary logistic regression, we only have 2 possible classes for the outcome (i.e. $y\in\{0,1\}$). We will generalize it to a setting where there are $K$ classes (i.e. $y\in\{1,2,\cdots,K\}$). Given a data sample $x$ and a weight matrix $W$, we can predict the probability that $x$ belongs to the $k$-th class using the softmax function with the following formula:
+\[
+p(y=k\mid x,W)=\frac{\exp(w_k^\top x)}{\sum_{j=1}^K\exp(w_j^\top x)}\quad\text{for}\quad k=1,2,\cdots,K
+\]
+
+Here:
+\begin{itemize}
+    \item $x$ is the data sample,
+    \item $W$ is the weight matrix, and
+    \item $w_k^\top$ is the $k$-th row of $W$.
+\end{itemize}
+
+
+    \begin{enumerate}
+
+\item (15 pts)
+    Since maximizing the likelihood is equivalent to minimizing the average negative log-likelihood (NLL), we want to minimize the average NLL loss to fit the model. Derive the average NLL loss for a dataset of \( n \) samples \( \{(x_i, y_i)\}_{i=1}^n \), given the formula:
+    \[
+    \mathrm{NLL}(W) = -\frac{1}{n} \log \prod_{i=1}^n p(y_i \mid x_i, W)
+    \]
+    Express the likelihood in terms of the weight parameters from the softmax function.
+    
+    
+\begin{answertext}{9cm}{}
+
+
+  
+\end{answertext} 
+
+    \item (10 pts)
+    The softmax function gives us the predicted probability for each class. The true class is represented by a one-hot encoded vector — a vector of length \( K \) where all entries are 0 except for the position corresponding to the true class, which is 1. 
+    
+    The cross-entropy loss function is defined as: \[
+\mathrm{CE}(W) = -\frac{1}{n}\sum_{i=1}^n\sum_{k=1}^K Y_{i,k} \log(\hat{Y}_{i,k})
+\] where \(Y_{i,k}\) is the one-hot encoded true label for sample \(i\), and \(\hat{Y}_{i,k}\) is the predicted probability for class \(k\). Can you show that the cross-entropy loss is equivalent to the average NLL loss? 
+
+\begin{answertext}{9cm}{}
+
+
+  
+\end{answertext} 
+
+\end{enumerate}
+
+\end{document}
