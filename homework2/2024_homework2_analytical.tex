@@ -65,7 +65,7 @@
 
 
 
-\bgroup
+% \bgroup
 \def\arraystretch{1.5}
 \newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
 \newcolumntype{z}[1]{>{\centering\arraybackslash}m{#1}}
@@ -182,7 +182,7 @@
 (50 points)\\
 \Large{Assigned: Friday, September 20, 2024} \\
 \Large{Due: Friday, October 4, 2024, 11:59 pm US/Eastern}}
-\author{NAME (JHED)}
+\author{Trevor Black (tblack20)}
 \date{}
 
 \begin{document}
@@ -281,16 +281,54 @@ Let $\hat{\beta}=[X^\top X]^{-1}X^\top Y$ be the least squares estimator of $\be
 
 \begin{answertext}{6cm}{}
 
+$\sum_{i=1}^{n} (g(x_i,\hat{\beta}) - y_i) = \sum_{i=1}^{n} (-y_i + \beta_{int} + \sum_{j=1}^{k} x_{ij} \cdot \beta_j) = \sum_{i=1}^{n} (-y_i + \sum_{j=0}^{k} x_{ij} \cdot \beta_j)$\\
+$= -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij} \cdot \beta_j$\\
+$Y = X \cdot \beta + \epsilon, Y = \sum_{i=1}^{n} y_i, X \cdot \beta = \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij} \cdot \beta_j$\\
+$\epsilon$ can be set to the null vector because it is normally distributed with a mean of $0$.\\
+This gives us\\
+$\sum_{i=1}^{n}y_i = \sum_{i=1}^{n}\sum_{j=0}^{k}x_{ij} \cdot \beta_j$\\
+Plugging back into our initial problem, we get\\
+$-\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij} \cdot \beta_j = -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} y_i = 0$\\
+Therefore,\\
+$\sum_{i=1}^{n} (g(x_i,\hat{\beta}) - y_i) = 0$
+
 \end{answertext} 
 \pagebreak
 \item (10 pts)  Assume  $\mathbb{E}[\boldsymbol{\epsilon}|X]=0$ w.r.t the conditional distribution $P(\boldsymbol{\epsilon}|X)$, show that the least square estimator is an unbiased estimator, i.e., $\mathbb{E}_{\mathcal{D}}[\hat{\beta}]=\beta$.
 
 \begin{answertext}{9cm}{}
 
+
+$\mathbb{E}_\mathcal{D}[\hat{\beta}] = \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^TY]$\\
+Using the equality $Y=X\beta + \epsilon$, we can substitute $Y$ to find\\
+$= \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^T(X\beta + \epsilon)]$\\
+By distributing $(X^TX)^{-1}X^T$ and separating the second term into its own $\mathbb{E}$, we find\\
+$= \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^TX\beta] + \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^T\epsilon]$\\
+$(X^TX)^{-1}X^TX = I$ (identity matrix), so\\
+$\mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^TX\beta] + \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^T\epsilon] = \mathbb{E}_\mathcal{D}[\beta] + \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^T\epsilon]$\\
+We can also take $\epsilon$ out of the $\mathbb{E}$ and evaluate the term, as we assume $\mathbb{E}[\boldsymbol{\epsilon}|X]=0$, giving us\\
+$\mathbb{E}_\mathcal{D}[\beta] + \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^T\epsilon] = \mathbb{E}_\mathcal{D}[\beta] + 0 \cdot \mathbb{E}_\mathcal{D}[(X^TX)^{-1}X^T] = \mathbb{E}_\mathcal{D}[\beta]$\\
+Because $\beta$ is not a random variable, but a constant, we can simply extract it from the $\mathbb{E}_\mathcal{D}$, giving us\\
+$\mathbb{E}_\mathcal{D}[\beta] = \beta$\\
+Therefore,
+$\mathbb{E}_\mathcal{D}[\hat{\beta}] = \beta$
+
 \end{answertext} 
 \item (10 pts) Assume that the covariance matrix of $\boldsymbol{\epsilon}$ is $\mathbb{E}\left[\boldsymbol{\epsilon} \boldsymbol{\epsilon}^T\right]=\sigma^2 I$.\\ Show that $\textrm{Var}(\hat{\beta})=\sigma^2\left(X^\top X\right)^{-1}$.
 
 \begin{answertext}{9cm}{}
+
+As proved in the last part, $\hat{\beta} = \beta + (X^TX)^{-1}X^T\epsilon$, so\\
+$\Var(\hat{\beta}) = \Var(\beta + (X^TX)^{-1}X^T\epsilon)$\\
+Because $\beta$ is a constant, we can take it out of the $\Var$ and evaluate it to $0$.\\
+$= \Var((X^TX)^{-1}X^T\epsilon)$\\
+The variance of a linear transform has the property $\Var(AX) = A(\Var(X))A^T$. Applying this where $X = \epsilon$ and $A = (X^TX)^{-1}X^T$, we get\\
+$(X^TX)^{-1}X^T\Var(\epsilon)X(X^TX)^{-1} = (X^TX)^{-1}X^T\mathbb{E}\left[\boldsymbol{\epsilon} \boldsymbol{\epsilon}^T\right]X(X^TX)^{-1}$\\
+Because $\mathbb{E}\left[\boldsymbol{\epsilon} \boldsymbol{\epsilon}^T\right]=\sigma^2 I$, we can substitute, giving us\\
+$(X^TX)^{-1}X^T\mathbb{E}\left[\boldsymbol{\epsilon} \boldsymbol{\epsilon}^T\right]X(X^TX)^{-1} = (X^TX)^{-1}X^T\sigma^2 IX(X^TX)^{-1}$\\
+And because $X^TX(X^TX)^{-1} = I$, we can find that\\
+$= \sigma^2(X^TX)^{-1}X^TX(X^TX)^{-1} = \sigma^2(X^TX)^{-1}$\\
+Therefore, $\Var(\hat{\beta}) = \sigma^2(X^TX)^{-1}$
 
 \end{answertext} 
 
@@ -327,8 +365,10 @@ Here:
     
 \begin{answertext}{9cm}{}
 
+$\mathrm{NLL}(W) = -\frac{1}{n} \log \prod_{i=1}^n p(y_i \mid x_i, W) = -\frac{1}{n} \log \prod_{i=1}^{n} \frac{\exp (w_{y_i}^T x_i)}{\sum_{j=1}^K \exp (w_j^T x_i)}$\\
+$= -\frac{1}{n} \sum_{i=1}^{n} \log \frac{\exp (w_{y_i}^T x_i)}{\sum_{j=1}^K \exp (w_j^T x_i)} = -\frac{1}{n} \sum_{i=1}^{n} \log \exp (w_{y_i}^T x_i) - \log \sum_{j=1}^K \exp (w_j^T x_i)$\\
+$= -\frac{1}{n} \sum_{i=1}^{n} (w_{y_i}^T x_i) - \log \sum_{j=1}^{K} \exp (w_j^T x_i)$\\
 
-  
 \end{answertext} 
 
     \item (10 pts)
