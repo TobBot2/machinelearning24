@@ -281,16 +281,16 @@ Let $\hat{\beta}=[X^\top X]^{-1}X^\top Y$ be the least squares estimator of $\be
 
 \begin{answertext}{6cm}{}
 
-$\sum_{i=1}^{n} (g(x_i,\hat{\beta}) - y_i) = \sum_{i=1}^{n} (-y_i + \beta_{int} + \sum_{j=1}^{k} x_{ij} \cdot \beta_j) = \sum_{i=1}^{n} (-y_i + \sum_{j=0}^{k} x_{ij} \cdot \beta_j)$\\
-$= -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij} \cdot \beta_j$\\
-$Y = X \cdot \beta + \epsilon, Y = \sum_{i=1}^{n} y_i, X \cdot \beta = \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij} \cdot \beta_j$\\
+$\sum_{i=1}^{n} (g(x_i,\hat{\beta}) - y_i) = \sum_{i=1}^{n} (-y_i + \beta_{int} + \sum_{j=1}^{k} x_{ij}\beta_j) = \sum_{i=1}^{n} (-y_i + \sum_{j=0}^{k} x_{ij}\beta_j)$\\
+$= -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij}\beta_j$\\
+$Y = X \cdot \beta + \epsilon, Y = \{y_1, \dots, y_n\}, X \cdot \beta = \{\sum_{j=0}^{k} x_{1j}\beta_j, \dots, \sum_{j=0}^{k} x_{nj}\beta_j\}$\\
+Combining these equations, we get $\{y_1, \dots, y_n\} = \{\sum_{j=0}^{k} x_{1j}\beta_j, \dots, \sum_{j=0}^{k} x_{nj}\beta_j\} + \epsilon$\\
+Taking the sum of each vector, we get a new equality: $\sum_{i=1}^{n} y_i = \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij}\beta_j + \epsilon$\\
 $\epsilon$ can be set to the null vector because it is normally distributed with a mean of $0$.\\
-This gives us\\
-$\sum_{i=1}^{n}y_i = \sum_{i=1}^{n}\sum_{j=0}^{k}x_{ij} \cdot \beta_j$\\
+This gives us $\sum_{i=1}^{n}y_i = \sum_{i=1}^{n}\sum_{j=0}^{k}x_{ij}\beta_j$\\
 Plugging back into our initial problem, we get\\
-$-\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij} \cdot \beta_j = -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} y_i = 0$\\
-Therefore,\\
-$\sum_{i=1}^{n} (g(x_i,\hat{\beta}) - y_i) = 0$
+$-\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} \sum_{j=0}^{k} x_{ij}\beta_j = -\sum_{i=1}^{n} y_i + \sum_{i=1}^{n} y_i = 0$\\
+Therefore, $\sum_{i=1}^{n} (g(x_i,\hat{\beta}) - y_i) = 0$
 
 \end{answertext} 
 \pagebreak
@@ -365,9 +365,11 @@ Here:
     
 \begin{answertext}{9cm}{}
 
-$\mathrm{NLL}(W) = -\frac{1}{n} \log \prod_{i=1}^n p(y_i \mid x_i, W) = -\frac{1}{n} \log \prod_{i=1}^{n} \frac{\exp (w_{y_i}^T x_i)}{\sum_{j=1}^K \exp (w_j^T x_i)}$\\
-$= -\frac{1}{n} \sum_{i=1}^{n} \log \frac{\exp (w_{y_i}^T x_i)}{\sum_{j=1}^K \exp (w_j^T x_i)} = -\frac{1}{n} \sum_{i=1}^{n} \log \exp (w_{y_i}^T x_i) - \log \sum_{j=1}^K \exp (w_j^T x_i)$\\
-$= -\frac{1}{n} \sum_{i=1}^{n} (w_{y_i}^T x_i) - \log \sum_{j=1}^{K} \exp (w_j^T x_i)$\\
+Average $\mathrm{NLL}(W) = -\frac{1}{n} \log \prod_{i=1}^n p(y_i \mid x_i, W)$\\
+$= -\frac{1}{n} \log \prod_{i=1}^{n} \frac{\exp (w_{y_i}^T x_i)}{\sum_{j=1}^K \exp (w_j^T x_i)}$\\
+$= -\frac{1}{n} \sum_{i=1}^{n} \log \frac{\exp (w_{y_i}^T x_i)}{\sum_{j=1}^K \exp (w_j^T x_i)}$\\
+$= -\frac{1}{n} \sum_{i=1}^{n} (\log \exp (w_{y_i}^T x_i) - \log \sum_{j=1}^K \exp (w_j^T x_i))$\\
+$= -\frac{1}{n} \sum_{i=1}^{n} (w_{y_i}^T x_i - \log \sum_{j=1}^{K} \exp (w_j^T x_i))$\\
 
 \end{answertext} 
 
@@ -380,7 +382,13 @@ $= -\frac{1}{n} \sum_{i=1}^{n} (w_{y_i}^T x_i) - \log \sum_{j=1}^{K} \exp (w_j^T
 
 \begin{answertext}{9cm}{}
 
-
+$\mathrm{CE}(W) = -\frac{1}{n}\sum_{i=1}^n\sum_{k=1}^K Y_{i,k} \log(\hat{Y}_{i,k})$\\
+Because the one-hot encoded $Y_{i,k}$ is $1$ in the true label for sample $i$ and is $0$ everywhere else, it `selects' the correct $k = y_i$, eliminating all other elements in the sum, giving us\\
+$= -\frac{1}{n}\sum_{i=1}^{n} \log(\hat{Y}_{i,y_i})$\\
+$\hat{Y}_{i,k}$ is given by the softmax function $p(y_i = k \mid x_i, W) = \frac{\exp(w_{y_i}^T x_i)}{\sum_{j=1}^K\exp(w_j^T x_i)}$, letting us plug in to get\\
+$-\frac{1}{n} \sum_{i=1}^{n} \log \frac{\exp(w_{y_i}^T x_i)}{\sum_{j=1}^K\exp(w_j^T x_i)}$\\
+Looking back at the last question, we can see that this is equivelant to $\mathrm{NLL}(W)$ as depicted in the third line.\\
+Therefore, $\mathrm{CE}(W) = \mathrm{NLL}(W)$
   
 \end{answertext} 
 
