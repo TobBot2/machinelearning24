@@ -485,20 +485,58 @@ What is the moralized graph for the DAG in this problem?
 
 \item[(e)] Write down the MRF factorization of the moralized graph ${\cal G}^a$.
 
-\begin{answertext}{3cm}{}    
+\begin{answertext}{2cm}{}    
 
-
+topological order...\\
+$P(A,B,C,D,E,F,G,H) = \\
+P(A)P(B|A)P(C|A,B)P(D|A,C)P(E|B,C)P(F|A,B)P(G|B,C,D,E,F)P(H|B,F,G)$
 
 \end{answertext}
 
 \item[(f)] Is this graph chordal?  If not, add as few edges as possible to make it chordal.  If you added edges, write the factorization of the new graph.
 
-\begin{answertext}{5cm}{}
+\begin{answertext}{1cm}{}
+
+This graph is chordal. Each cycle of 4 or more has a chord.
 
 \end{answertext}
 \item[(g)] Create a clique tree from the triangulated graph above (either ${\cal G}^a$ if it is chordal, or the graph obtained from ${\cal G}^a$ by adding new edge(s) to make it chordal).
 
-\begin{answertext}{5.5cm}{}
+\begin{answertext}{8cm}{}
+
+Max cliques: ABC, ABF, BFG, HGB, GBCE, CAD, DCG.\\
+
+Connecting lines annotated with common nodes (sorry for mess, I'm unfamiliar with latex)
+
+\begin{tikzpicture}[node distance=2.5cm, >=stealth, thick]
+        % Nodes for cliques
+        \node[draw, circle] (ABC) {$ABC$};
+        \node[draw, circle, right of=ABC] (ABF) {$ABF$};
+        \node[draw, circle, below right of=ABF] (BFG) {$BFG$};
+        \node[draw, circle, below of=BFG] (HGB) {$HGB$};
+        \node[draw, circle, above left of=HGB] (GBCE) {$GBCE$};
+        \node[draw, circle, below left of=ABC] (CAD) {$CAD$};
+        \node[draw, circle, below right of=CAD] (DCG) {$DCG$};
+        
+        % Edges for separators
+        \draw (ABC) -- node[above] {$\{A,B\}$} (ABF);
+        \draw (ABF) -- node[above] {$\{B,F\}$} (BFG);
+        \draw (BFG) -- node[above] {$\{G,B\}$} (HGB);
+        \draw (HGB) -- node[above] {$\{G,B\}$} (GBCE);
+        \draw (GBCE) -- node[above] {$\{C\}$} (CAD);
+        \draw (CAD) -- node[above] {$\{C\}$} (DCG);
+        \draw (DCG) -- node[above] {$\{C\}$} (ABC);
+        \draw (CAD) -- node[above] {$\{A,C\}$} (ABC);
+        \draw (ABC) -- node[above] {$\{B,C\}$} (GBCE);
+        \draw (DCG) -- node[above] {$\{C,G\}$} (GBCE);
+        \draw (DCG) -- node[above] {$\{G\}$} (HGB);
+        \draw (BFG) -- node[above] {$\{B\}$} (GBCE);
+        \draw (DCG) -- node[above] {$\{G\}$} (BFG);
+        \draw (ABF) -- node[above] {$\{B\}$} (GBCE);
+        \draw (CAD) -- node[above] {$\{A\}$} (ABF);
+        \draw (ABC) -- node[above] {$\{B\}$} (HGB);
+        \draw (ABF) -- node[above] {$\{B\}$} (HGB);
+    \end{tikzpicture}
 
 \end{answertext}
 
@@ -506,6 +544,7 @@ What is the moralized graph for the DAG in this problem?
 $\vec{S}_i$ towards its neighbor $\vec{S}_j$ closer to the root, and outgoing messages $\phi^{\vec{S}_k\gets\vec{S}_i}$ from $\vec{S}_i$ to each neighbor $\vec{S}_k$ further than $\vec{S}_i$ from the root, in terms of clique potentials and other messages.
 
 \begin{answertext}{6cm}{}
+
 
 \end{answertext}
 
