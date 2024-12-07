@@ -272,17 +272,38 @@ The above three DAGs give the same model: $(B \ci C \mid A)$, $(D \ci A \mid B,C
 \item[(a)] Write out all equivalence classes for DAGs with three vertices.  How many equivalence classes are there?
 
 \begin{answertext}{3cm}{}
+
+Eq. class 1: $A \to B \to C$\\
+Eq. class 2: $A \to B \leftarrow C$\\
+Eq. class 3: $A \to B \to C, A \to C$
+
+All other DAGs produce the same equivalence classes as these three base ones, so there are a total of three equivalence classes.
     
 \end{answertext}
 \item[(b)] Assume all data is binary.  Write down the dimension of each model corresponding to each equivalence class in (a).
 
 \begin{answertext}{3cm}{}
+
+The dimension of each model is $2^k$ for $k$ parents of the node.
+
+In the order presented, their dimensions are 5, 6, and 7.
     
 \end{answertext}
 \item[(c)] Create an undirected graph representing the discrete state space for structure learning, where vertices represent equivalence classes in (a), and there is an edge connecting any two classes where a DAG in one class differs from a DAG in another class by \emph{addition or deletion} precisely one $\to$ edge.
 
-\begin{answertext}{3cm}{}
-    
+\begin{answertext}{1.5cm}{}
+\begin{tikzpicture}[>=stealth, node distance=2.6cm]
+        \begin{scope}[xshift=8.0cm]
+		\path[-, very thick]
+			node[] (1) {$1$}
+			node[right of=1] (3) {$3$}
+			node[right of=3] (2) {$2$}
+
+			(1) edge[blue] (3)
+			(2) edge[blue] (3)
+		;
+	\end{scope}
+\end{tikzpicture}
 \end{answertext}
 
 \item[(d)] 
@@ -290,12 +311,19 @@ Assume the GES algorithm performs the following sequence of edge additions and d
 Write down all sequences of equivalence classes consistent with this set of edge additions and removals.  Note: there could be more than one such sequence.
 
 \begin{answertext}{3cm}{}
+
+$\{A \to B\}$\\
+$\{A \to B \to C\}$\\
+$\{A \to B \to C, A \to C\}$\\
+$\{A \to B, A \to C\}$
     
 \end{answertext}
 
 \item[(e)] Consider a DAG $V_1 \to V_2 \to V_3 \to V_4 \to V_k$.  How many DAGs are observationally equivalent to this DAG?  Explain.
 
-\begin{answertext}{3cm}{}
+\begin{answertext}{3.5cm}{}
+
+Directed and split triplets function the same when evaluating the independence statements. Collider triplets, however, do not. This DAG consists only of directed triplets, so altering the relationships so long as they do not create collider triplets will produce observationally equivalent DAGs. No edges can be removed or added as well. This leaves 4 possible alternative DAGs (or $k-1$ for arbitrary length $k$), as each edge can be flipped, but all edges to the left of it must also be flipped so that no collider triplet is present.
     
 \end{answertext}
 
@@ -321,18 +349,56 @@ p(x_{4i} \mid r_{4i}, x^{(1)}_{4i})
 }
 Draw the missing data graph for this model.
 
-\begin{answertext}{3cm}{}
+\begin{answertext}{6cm}{}
+
+\begin{tikzpicture}[>=stealth, node distance=1.8cm]
+
+\begin{scope}
+        % Define nodes
+        \path[->, very thick]
+        node[] (x1) {$x_1$}
+        node[right of=x1] (x3) {$x_3$}
+        node[below left of=x1] (r2) {$r_2$}
+        node[below right of=x3] (r4) {$r_4$}
+        node[below right of=r2] (x21) {$x_2^{(1)}$}
+        node[below left of=r4] (x41) {$x_4^{(1)}$}
+        node[below of=x21] (x2) {$x_2$}
+        node[below of=x41] (x4) {$x_4$}
+
+        % Draw edges
+        (x1) edge (r2)
+        (x1) edge (r4)
+        (x3) edge (r4)
+        (x1) edge (x21)
+        (x3) edge (x41)
+        (x21) edge (x2)
+        (r2) edge (x2)
+        (x41) edge (x4)
+        (r4) edge (x4)
+        ;
+\end{scope}
+\end{tikzpicture}            
     
 \end{answertext}
 \item[(b)] Does this likelihood represent a missing at random (MAR) model or missing not at random (MNAR) model?
 
-\begin{answertext}{3cm}{}
+\begin{answertext}{1.5cm}{}
+
+It is MAR because the r values depend only on observed variables and not on the values of the missing data itself. 
     
 \end{answertext}
 \item[(c)] Express $p(x_1, x_2^{(1)}, x_3, x_4^{(1)})$ as a function $p(x_1, x_2, x_3, x_4, r_2, r_4)$.
 
 
-\begin{answertext}{3cm}{}
+\begin{answertext}{4cm}{}
+
+Expanded form:\\
+$p(x_1,x_2,x_3,x_4,r_2,r_4)=p(x_1)p(x_3)p(r_2|x_1)p(r_4|x_1,x_3)p(x_2^{(1)}|x_1)p(x_4^{(1)}|x_3)p(x_2|x_2^{(1)},r_2)\\p(x_4|x_4^{(1)},r_4)$\\
+Handle $x_2^{(1)}$ and $x_4^{(1)}$:
+$p(x_1,x_2^{(1)},x_3,x_4^{(1)})=\Sigma_{r_2,r_4} \int_{x_2} \int_{x_4}p(x_1,x_2,x_3,x_4,r_2,r_4)dx_2dx_4$.\\
+Substituting and simplifying results in:
+
+$p(x_1,x_2^{(1)},x_3,x_4^{(1)})=p(x_1)p(x_3)\Sigma_{r_2} p(r_2|x_1)\Sigma_{r_4} p(r_4|x_1,x_3)p(x_2^{(1)}|x_1)p(x_4^{(1)}|x_3)$
     
 \end{answertext}
 \item[(d)] Consider the following observed data likelihood:
@@ -358,14 +424,53 @@ p(x_{3i} \mid r_{3i}, x^{(1)}_{3i})
 }
 Draw the missing data graph for this model.
 
-\begin{answertext}{3cm}{}
+\begin{answertext}{6.7cm}{}
+
+\begin{tikzpicture}[>=stealth, node distance=2cm]
+        % Nodes
+        \node[] (x1_1) {$x_{1i}^{(1)}$};
+        \node[below right of=x1_1] (x2_1) {$x_{2i}^{(1)}$};
+        \node[above right of=x2_1] (x3_1) {$x_{3i}^{(1)}$};
+        \node[below of=x1_1] (x1) {$x_{1i}$};
+        \node[below of=x2_1] (x2) {$x_{2i}$};
+        \node[below of=x3_1] (x3) {$x_{3i}$};
+        \node[below of=x1] (r1) {$r_{1i}$};
+        \node[below of=x2] (r2) {$r_{2i}$};
+        \node[below of=x3] (r3) {$r_{3i}$};
+        
+        % Edges for dependencies
+        % From missing variables to observed
+        \draw[->, very thick] (x1_1) -- (x1);
+        \draw[->, very thick] (x2_1) -- (x2);
+        \draw[->, very thick] (x3_1) -- (x3);
+        
+        % Missing variables dependencies
+        \draw[->, very thick] (x1_1) -- (x2_1);
+        \draw[->, very thick] (x2_1) -- (x3_1);
+        \draw[->, very thick] (x1_1) -- (x3_1);
+        
+        % Indicator dependencies
+        \draw[->, very thick] (x2_1) -- (r1);
+        \draw[->, very thick] (x3_1) -- (r1);
+        \draw[->, very thick] (x1_1) -- (r2);
+        \draw[->, very thick] (r3) -- (r2);
+        \draw[->, very thick] (x2_1) -- (r3);
+        \draw[->, very thick] (r1) -- (r3);
+        
+        % Additional edges
+        \draw[->, very thick] (r1) -- (x1);
+        \draw[->, very thick] (r2) -- (x2);
+        \draw[->, very thick] (r3) -- (x3);
+\end{tikzpicture}
     
 \end{answertext}
 
 
 \item[(e)] Does this likelihood represent a missing at random (MAR) model or missing not at random (MNAR) model?
 
-\begin{answertext}{3cm}{}
+\begin{answertext}{1.5cm}{}
+
+It is MNAR because some of the r values depend on unobserved variables and not on the values of the missing data itself.
     
 \end{answertext}
 
@@ -373,7 +478,9 @@ Draw the missing data graph for this model.
 \item[(f)] Does the observed data likelihood have a unique global maximum?  In other words, 
  is $p(x_1^{(1)}, x_2^{(1)}, x_3^{(1)}, r_1, r_2, r_3)$ a function of the observed data distribution $p(x_1, x_2, x_3, r_1, r_2, r_3)$?  Why?  (This is a yes/no question with an explanation: if such a function exists, you don't have to give it)
  
-\begin{answertext}{3cm}{}
+\begin{answertext}{2cm}{}
+
+No. This is because $p(x_1^{(1)}, x_2^{(1)}, x_3^{(1)}, r_1, r_2, r_3)$ involves summation over missing data. This heavily complicates things as multiple values for these missing data points can provide different maxima.
     
 \end{answertext}
 \end{enumerate}
@@ -383,39 +490,82 @@ Draw the missing data graph for this model.
 
 \section*{Reinforcement Learning.}
 \textbf{Question 3.} (16 pts)
-    \begin{enumerate}
-        \item[(a)] We run policy $\pi$ in a MDP and obtain a sequence of state and action $T$ timesteps:
-        \[\tau=\{s^{(1)}, a_1, s^{(2)}, a_2, s^{(3)}, a_3,\cdots, a_{T-1}, s^{(T)}\}\]
-       Assume that a stationary policy $\pi$: $a_t \sim ~\pi(\cdot \mid s^{(t)}), \forall t\in[T]$, write the loglikehood of this trajectory:  $\log p(\tau)$.
+\begin{enumerate}
+\item[(a)] We run policy $\pi$ in a MDP and obtain a sequence of state and action $T$ timesteps:
+\[\tau=\{s^{(1)}, a_1, s^{(2)}, a_2, s^{(3)}, a_3,\cdots, a_{T-1}, s^{(T)}\}\]
+Assume that a stationary policy $\pi$: $a_t \sim ~\pi(\cdot \mid s^{(t)}), \forall t\in[T]$, write the loglikehood of this trajectory:  $\log p(\tau)$.
+
+\begin{answertext}{3cm}{}
+
+Likelihood: $p(\tau)=p(s^{(1)},a_1,s^{(2)},a_2,...,a^{T-1},s^{(T)})$\\
+$\Longrightarrow p(\tau)=p(s^{(1)})\prod_{t=1}^{T-1}p(a_t|s^{(t)})p(s^{(t+1)}|s^{(t)},a_t)$
+Log-likelihood: $\log p(\tau)=\log p(s^{(1)})+\sum_{t=1}^{T-1}\log p(a_t|s^{(t)})+\log p(s^{(t+1)}|s^{(t)},a_t)$\\
+Replace $p(a_t | s^{(t)})$ with $\pi(a_t | s^{(t)})$ due to policy being stationary\\
+$\log p(\tau)=\log p(s^{(1)})+\sum_{t=1}^{T-1}\log \pi(a_t|s^{(t)})+\log p(s^{(t+1)}|s^{(t)},a_t)$
+\end{answertext}
+
+\item [(b)] Draw a DAG for $p(\tau)$ in question (a)
+
+\begin{answertext}{3cm}{}
+
+\begin{tikzpicture}[>=stealth, node distance=1.5cm]
+        % Nodes
+        \node[] (s1) {$s^{(1)}$};
+        \node[below right of=s1] (a1) {$a_1$};
+        \node[above right of=a1] (s2) {$s^{(2)}$};
+        \node[below right of=s2] (a2) {$a_2$};
+        \node[above right of=a2] (s3) {$s^{(3)}$};
+        \node[below right of=s3] (a3) {$a_3$};
+        \node[above right of=a3] (sT) {$s^{(T)}$};
         
-    \begin{answertext}{3cm}{}
-    \end{answertext}
+        % Arrows between states and actions
+        \draw[->, very thick] (s1) -- (a1);
+        \draw[->, very thick] (a1) -- (s2);
+        \draw[->, very thick] (s2) -- (a2);
+        \draw[->, very thick] (a2) -- (s3);
+        \draw[->, very thick] (s3) -- (a3);
+        \draw[->, very thick] (a3) -- (sT);
+        
+        % Transition arrows (state to state)
+        \draw[->, very thick] (s1) -- (s2);
+        \draw[->, very thick] (s2) -- (s3);
+        \draw[->, very thick] (s3) -- (sT);
+        
+        \end{tikzpicture}
+            
+\end{answertext}
 
-    \item [(b)] Draw a DAG for $p(\tau)$ in question (a)
-    
-    \begin{answertext}{3cm}{}
-    \end{answertext}
+\item [(c)] As we've seen in class that the discount factor $0\leq \gamma \leq 1$ represents how much weight is placed on future rewards compared to immediate rewards. Assume the rewards are bounded, $R_a(s^{(t)}, s^{(t+1)})\in [0,1]$.
+\begin{itemize}
+\item 
+Give a brief explanation of why the value function $V(s)$ could be unbounded for $\gamma=1$ in the \textbf{infinite horizon} setting, even if we assume the reward is bounded. 
+\item  
+Show that $V(s)\leq \frac{1}{1-\gamma}$, and $Q(s,a)\leq \frac{1}{1-\gamma}$, for $\gamma \in [0,1)$?
+\end{itemize} 
+\begin{answertext}{4.5cm}{}
 
-    \item [(c)] As we've seen in class that the discount factor $0\leq \gamma \leq 1$ represents how much weight is placed on future rewards compared to immediate rewards. Assume the rewards are bounded, $R_a(s^{(t)}, s^{(t+1)})\in [0,1]$.
-   \begin{itemize}
-       \item 
-    Give a brief explanation of why the value function $V(s)$ could be unbounded for $\gamma=1$ in the \textbf{infinite horizon} setting, even if we assume the reward is bounded. 
-   \item  
-    Show that $V(s)\leq \frac{1}{1-\gamma}$, and $Q(s,a)\leq \frac{1}{1-\gamma}$, for $\gamma \in [0,1)$?
-   \end{itemize} 
-    \begin{answertext}{4.5cm}{}
-    \end{answertext}
+There is no discounting in future rewards, so even if rewards are bounded, there is no limit to the total reward accumulated over.
 
-    \pagebreak
-    \item [(d)] Remind that the update rule for the value function is:
-    $$V_Q(s)=\max_a Q(s,a),$$
+If the discount factor is less than one, $V(s)=\sum_{t=1}^{\infty} \gamma^t R_a \leq \sum_{t=1}^{\infty} \gamma^t$ because $R_a$ is either $0$ or $1$. Because it is a geometric series, it can then be represented as $\frac{1}{1-\gamma}$, so $V(s) \leq \frac{1}{1-\gamma}$. Since the policy is stationary, $Q(s,a)$ is likewise bounded. 
+
+\end{answertext}
+
+\pagebreak
+\item [(d)] Remind that the update rule for the value function is:
+$$V_Q(s)=\max_a Q(s,a),$$
 \textit{(the value function update of Value Iteration algorithm in the lecture is simply $V^{(t)}=V_{Q^{(t)}}$)}.
 
-    Show that for any two $Q, Q'$ state-action value functions:
-   $$\left|V_Q(s)-V_{Q^{\prime}}(s)\right| \leq \max _{a \in \mathcal{A}}\left|Q(s, a)-Q^{\prime}(s, a)\right| .$$ 
-    \begin{answertext}{2cm}{}
-    \end{answertext}
-    \end{enumerate}
+Show that for any two $Q, Q'$ state-action value functions:
+$$\left|V_Q(s)-V_{Q^{\prime}}(s)\right| \leq \max _{a \in \mathcal{A}}\left|Q(s, a)-Q^{\prime}(s, a)\right| .$$ 
+\begin{answertext}{4cm}{}
+
+Difference between value functions (and plug in above definition):\\
+$|V_Q(s) - V_{Q'}(s)| = |\max_{a\in A}Q(s, a) - \max_{a\in A}Q'(s, a)|$
+Because the maximum difference between $Q(s, a)$ and $Q'(s, a)$ is $\max_{a \in A} | Q(s, a) - Q'(s, a)|$, we get the final inequality:\\
+$|V_Q(s) - V_{Q'}(s)| \leq \max_{a\in A}|Q(s, a) - Q'(s, a)|$
+
+\end{answertext}
+\end{enumerate}
 
 \pagebreak
 
